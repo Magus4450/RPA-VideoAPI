@@ -82,38 +82,18 @@ class VideoUploadingListAPIView(generics.ListAPIView):
 """
     View for getting charge of a video given size, length and type of video
 """
-@api_view(http_method_names=['POST'])
-def VideoChargesAPIVIEW(request):
-    data = request.data
-    if 'size_bytes' not in data.keys():
-        return Response({"message": "size_bytes is required"}, status = 400)
-    
-    if 'length_seconds' not in data.keys():
-        return Response({"message": "video_length is required"}, status = 400)
-    
-    if 'video_type' not in data.keys():
-        return Response({"message": "video_type is required"}, status = 400)
+@api_view(http_method_names=['GET'])
+def VideoChargesAPIVIEW(request, size_bytes, length_seconds, video_type):
 
-    # If size_bytes is not a number return error
-    try:
-        size_MB = float(data['size_bytes']) / (1024 * 1024)
-    except ValueError:
-        return Response({"message": "size_bytes must be a number"}, status = 400)
+    length_min = length_seconds // 60
+    length_sec = length_seconds % 60
 
-    # If length_seconds is not a number return error
-    try:
-        length_min = int(data['length_seconds']) // 60
-        length_sec = int(data['length_seconds']) % 60
-    except ValueError:
-        return Response({"message": "length_seconds must be a number"}, status = 400)
-
-    video_type = data['video_type']
-
+    size_MB = size_bytes / (1024 * 1024)
     if video_type not in ['mp4', 'mkv']:
         return Response({"message": "video_type must be mp4 or mkv"}, status = 400)
 
     charge = 0
-
+    print(size_MB)
     if size_MB < 500:
         charge += 5
     else:

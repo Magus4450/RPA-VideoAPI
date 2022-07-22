@@ -1,3 +1,26 @@
+## How to run
+
+1. Make a virtual environment <br>
+`python3 -m venv env`
+
+
+2. Activate virtual envrionment <br>
+`source /env/Scripts/activate` for Win <br>
+`bin /env/lib/activate` for Mac / Linux
+
+
+3. Install requirements <br>
+`pip install -r requirements.txt`
+
+4. Migrate <br>
+`python3 manage.py migrate`
+
+5. Run <br>
+`python3 manage.py runserver`
+
+
+<hr>
+
 ## API Endpoints
 
 #### 1.  `/api/video/create/`
@@ -30,7 +53,11 @@
 *Get charge of video of given parametes*
 <ul>
     <li> Allowed Requests: <strong>GET</strong> </li>
-
+        <li> Constraints: </li>
+        <ul>
+            <li> File type should be either .mp4 or .mkv</li>
+            <li> File size should be less then 1GB </li>
+            <li> Video length should be less than 10 minutes </li>
 </ul>
 
 #### 4.  `/api/video/size/<int:minm>/<int:maxm>/`
@@ -59,7 +86,3 @@
 <ul>
     <li> Allowed Requests: <strong>GET</strong> </li>
 </ul>
-
-
-
-

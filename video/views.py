@@ -85,12 +85,19 @@ class VideoUploadingListAPIView(generics.ListAPIView):
 @api_view(http_method_names=['GET'])
 def VideoChargesAPIVIEW(request, size_bytes, length_seconds, video_type):
 
+    if (length_seconds / 60) > 10:
+        return Response({"message": "Video length cannot be more than 10 minutes"}, 400)
+    if video_type not in ['mp4', 'mkv']:
+        return Response({"message": "video_type must be mp4 or mkv"}, status = 400)
+
+    size_MB = size_bytes / (1024 * 1024)
+    
+    if(size_MB > 1024):
+        return Response({"message": "Video size cannot be more than 1GB"}, status = 400)
+
     length_min = length_seconds // 60
     length_sec = length_seconds % 60
 
-    size_MB = size_bytes / (1024 * 1024)
-    if video_type not in ['mp4', 'mkv']:
-        return Response({"message": "video_type must be mp4 or mkv"}, status = 400)
 
     charge = 0
     print(size_MB)

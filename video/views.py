@@ -7,46 +7,61 @@ from .models import UploadingVideos, Video
 from rest_framework.response import Response
 
 
+"""
+    Class for uploading videos
+"""
 class VideoCreateAPIView(generics.CreateAPIView):
     serializer_class = serializers.VideoSerializer
 
-    def create(self, request, *args, **kwargs):
-        print("CREATE")
-        response = super().create(request, *args, **kwargs)
-        return response
 
     def post(self, request, *args, **kwargs):
         
-        # name = request.data["name"]
         # Setting custom upload handler
         request.upload_handlers = [CustomFileUploadHandler()]
 
         return super().post(request, *args, **kwargs)
 
+"""
+    Class for getting all videos
+"""
 class VideoListAPIView(generics.ListAPIView):
     queryset = Video.objects.all()
     serializer_class = serializers.VideoSerializer
-    
+
+
+"""
+    View for getting all videos within a size range
+"""
 @api_view(http_method_names=['GET'])
 def SizeVideoListAPIVIew(request, minm = 0, maxm = 1024*1024*1024): # In Bytes
-    print(minm, maxm)
     videos = Video.objects.filter(size_bytes__gte=minm, size_bytes__lte=maxm)
     
     serializer = serializers.VideoSerializer(videos, many=True)
     return Response(serializer.data)
 
+
+"""
+    View for getting all videos from given date to now
+"""
 @api_view(http_method_names=['GET'])
 def DateVideoListAPIVIew(request, date):
     videos = Video.objects.filter(date_uploaded__gte=date)
     serializer = serializers.VideoSerializer(videos, many=True)
     return Response(serializer.data)
 
+
+"""
+    View for getting all videos in size range
+"""
 @api_view(http_method_names=['GET'])
 def LengthVideoListAPIVIew(request, minm, maxm):
     videos = Video.objects.filter(duration_seconds__gte=minm, duration_seconds__lte=maxm)
     serializer = serializers.VideoSerializer(videos, many=True)
     return Response(serializer.data)
 
+"""
+    View for getting vidoes that are currently being uploaded
+"""
 class VideoUploadingListAPIView(generics.ListAPIView):
     serializer_class = serializers.UploadingVideoSerializer
 
@@ -64,10 +79,12 @@ class VideoUploadingListAPIView(generics.ListAPIView):
         
         return response
 
+"""
+    View for getting charge of a video given size, length and type of video
+"""
 @api_view(http_method_names=['POST'])
 def VideoChargesAPIVIEW(request):
     data = request.data
-    print(request.POST.keys())
     if 'size_bytes' not in data.keys():
         return Response({"message": "size_bytes is required"}, status = 400)
     
@@ -110,5 +127,5 @@ def VideoChargesAPIVIEW(request):
 
     return Response({
         "charge": "$"+str(charge),
-    })
+    }, 200)
 

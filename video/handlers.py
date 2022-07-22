@@ -8,19 +8,11 @@ from .models import UploadingVideos
 When file size is less than 2.5 MB, it stores the entire file in the memory and writes the file into disk from memory and is vert fast.
 """
 # class CustomMemoryFileUploadHandler(MemoryFileUploadHandler):
-
-#     def __init__(self, request= ...) -> None:
-#         print("INIT mem")
-#         # self.filename = request.POST["name"]
-#         super().__init__(request)
-
 #     # This method is run when data is coming in a a new file is needed to store it
 #     def new_file(self, *args, **kwargs):
-#         print("NEW FILE mem")
 #         super().new_file(*args, **kwargs)
     
 #     def file_complete(self, file_size):
-#         print("END FILE mem")
 #         return super().file_complete(file_size) 
 
 #     def handle_raw_input(
@@ -42,8 +34,6 @@ When file size is less than 2.5 MB, it stores the entire file in the memory and 
 """
 If file size is large, it will write uploaded file into a temporary location in system's temp directory
 """
-
-
 
 # This class handles all file uploads grated than 2.5MB (Default)
 class CustomFileUploadHandler(TemporaryFileUploadHandler):

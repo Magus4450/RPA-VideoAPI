@@ -9,10 +9,6 @@ class VideoSerializer(serializers.ModelSerializer):
 
     video = serializers.FileField(
         required = True,
-        error_messages = {
-            "file_type" : "Only .mp4 and mkv filetypes are supported",
-            "length": "Video cannot exceed length of 10 minutes"
-        }
     )
     class Meta:
         model = Video

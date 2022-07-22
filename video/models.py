@@ -19,3 +19,6 @@ class UploadingVideos(models.Model):
     end_time = models.DateTimeField(blank=True, null=True)
     time_taken_seconds = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
